@@ -1,0 +1,19 @@
+syntax = "proto3";
+package pb;
+
+option go_package = "subscription-service/pb;pb";
+
+message WeatherRequest {
+  string location = 1;
+}
+
+message WeatherResponse {
+  string location = 1;
+  double temperature = 2;
+  string condition = 3;
+  string updated_at = 4;
+}
+
+service WeatherService {
+  rpc GetCurrentWeather(WeatherRequest) returns (WeatherResponse);
+}

@@ -1,0 +1,15 @@
+db:
+  url: "postgresql://postgres:1234567@localhost:5432/subscription-db"
+rabbit:
+  user: "admnpnl"
+  password: "rabbitmq1423"
+  host: "localhost:5672"
+weather:
+  grpc:
+    host: "localhost"
+    port: "50052"
+http:
+  port: "8080"
+  base_url: "http://localhost:8080"
+notification:
+  interval: "1m"

@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  subscription-db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234567
+      - POSTGRES_DB=subscription-db
+    volumes:
+      - subscription-db-data:/var/lib/postgresql/data
+
+  weather-db:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234567
+      - POSTGRES_DB=weather-db
+    volumes:
+      - weather-db-data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    ports:
+      - "15672:15672"  # RabbitMQ management UI
+
+  subscription-service:
+    build:
+      context: ./backend/subscription-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=postgresql://postgres:1234567@subscription-db:5432/subscription-db
+      - RABBIT_HOST=rabbitmq:5672
+      - WEATHER_GRPC_HOST=weather-service:50052
+    depends_on:
+      - subscription-db
+      - rabbitmq
+      - weather-service
+
+  weather-service:
+    build:
+      context: ./backend/weather-service
+      dockerfile: Dockerfile
+    environment:
+      - DB_URL=postgresql://postgres:1234567@weather-db:5432/weather-db
+    depends_on:
+      - weather-db
+
+  email-service:
+    build:
+      context: ./backend/email-service
+      dockerfile: Dockerfile
+    environment:
+      - RABBIT_HOST=rabbitmq:5672
+      - HTTP_BASEURL=http://subscription-service:8080
+    depends_on:
+      - rabbitmq
+      - subscription-service
+
+volumes:
+  subscription-db-data:
+  weather-db-data:

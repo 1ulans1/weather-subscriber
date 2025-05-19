@@ -1,0 +1,6 @@
+db:
+  url: "postgresql://postgres:1234567@localhost:5432/weather-db"
+weather:
+  api:
+    key: ""
+port: "50052"

@@ -1,0 +1,11 @@
+rabbit:
+  user: "admnpnl"
+  password: "rabbitmq1423"
+  host: "localhost:5672"
+email:
+  smtpHost: "smtp.gmail.com:587"
+  smtpUser: "genesis.test.task.maksym@gmail.com"
+  smtpPassword: "password"
+  fromAddress: "genesis.test.task.maksym@gmail.com"
+http:
+  baseURL: "http://localhost:8080"
