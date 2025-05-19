@@ -24,7 +24,7 @@ Here’s how they connect:
 1. **Get the Files**  
    Open a terminal and type:
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/1ulans1/wether-subscriber
    cd weather-subscriber
    ```
 
