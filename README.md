@@ -1,50 +1,52 @@
 # Weather Subscription Service
 
-## Architecture
+This project lets you sign up for weather updates. Pick a city, and it will send you emails with the latest weather
+info.
 
-The system uses a microservices architecture with three core services:
+## How It Works
 
-- **`subscription-service`**: Handles user subscriptions, fetches weather data from `weather-service` using gRPC, and sends email notifications via RabbitMQ.
-- **`weather-service`**: Retrieves weather data from an external API and serves it via gRPC.
-- **`email-service`**: Consumes RabbitMQ messages to send email notifications.
+The system uses small programs that work together:
 
-## Microservices
+- **Subscription Service**: Where you sign up. It gets weather info and sends messages for emails.
+- **Weather Service**: Finds weather data from the internet.
+- **Email Service**: Sends you weather emails.
 
-1. **subscription-service**:
-   - **Ports**: HTTP (`8080`), gRPC client.
-   - **Dependencies**: `subscription-db`, `rabbitmq`, `weather-service`.
-
-2. **weather-service**:
-   - **Ports**: gRPC (`50052`).
-   - **Dependencies**: `weather-db`.
-
-3. **email-service**:
-   - **Dependencies**: `rabbitmq`.
-
-4. **frontend**:
-   - **Ports**: HTTP (`80`).
-   - **Dependencies**: `subscription-service`.
-
+Here’s how they connect:
 ![microservices.png](microservices.png)
 
-## How to Run
+## What You Need
 
-### Prerequisites
-- Docker and Docker Compose.
+- **Docker**: A tool to run the programs. [Get Docker here](https://www.docker.com/get-started).
+- **Docker Compose**: Comes with Docker to manage everything.
 
-### Steps
-1. **Clone the repo**:
+## How to Start It
+
+1. **Get the Files**  
+   Open a terminal and type:
    ```bash
    git clone <your-repo-url>
    cd weather-subscriber
    ```
 
-2. **Configure**:
-   - Edit `email-service/config/config.yaml` with SMTP credentials.
+2. **Set Up Email**
+    - Open `email-service/config/config.yaml` in a text editor.
+    - Add your email info, like this (example for Gmail):
+      ```yaml
+      smtpHost: "smtp.gmail.com:587"
+      smtpUser: "your-email@gmail.com"
+      smtpPassword: "your-app-password"
+      fromAddress: "your-email@gmail.com"
+      ```
+    - **Note**: For Gmail, make an [app password](https://support.google.com/accounts/answer/185833) if you use 2-factor
+      authentication.
 
-3. **Run**:
+3. **Run It**  
+   In the terminal, type:
    ```bash
    docker-compose up --build
    ```
-   - Frontend: `http://localhost:80`.
-   - API: `http://localhost:8080`.
+    - Wait a bit for it to start.
+
+4. **Try It Out**
+    - Open a browser and go to `http://localhost:80` to sign up.
+    - Or use the API at `http://localhost:8080` if you’re coding.
